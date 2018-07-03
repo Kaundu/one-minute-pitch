@@ -14,3 +14,17 @@ class CategoryForm(FlaskForm):
     """
     category_name = StringField('Pitch Category',validators=[Required()])
     submit = SubmitField('Create')
+
+class PitchForm(FlaskForm):
+    """
+    class to create a form to create pitch
+    """
+    pitch = StringField('Pitch',validators=[Required()])
+    submit = SubmitField('Create')
+
+class CommentForm(FlaskForm):
+    """
+    class to create form to comment on a pitch
+    """
+    comment = StringField('Comment Content', validators=[Required()])
+    submit = SubmitField('Submit')
