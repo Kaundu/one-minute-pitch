@@ -29,3 +29,22 @@ class User (UserMixin,db.Model):
     def get_categories(cls,id):
         categories = Category.query.all()
         return categories
+class Pitch(db.Model):
+    __tablename__ = 'pitches'
+
+    id = db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String(255))
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    comments = db.relationship('Comment', backref='pitch', lazy='dynamic')
+
+    
+
+    def save_pitch(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_pitch(cls,category_id):
+        pitches = Pitch.query.order_by(Pitch.id.desc()).filter_by(category_id=category_id).all()
+        return pitches
