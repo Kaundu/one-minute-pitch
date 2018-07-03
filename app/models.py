@@ -13,4 +13,19 @@ class User (UserMixin,db.Model):
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
 
     def __repr__(self):
-        return f'User {self.name}' 
+        return f'User {self.name}' class Category(db.Model):
+
+    __tablename__ = 'categories'
+
+    id = db.Column(db.Integer,primary_key = True)
+    category_name =db.Column(db.String)
+    pitches = db.relationship('Pitch', backref='category', lazy='dynamic')
+
+    def save_category(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_categories(cls,id):
+        categories = Category.query.all()
+        return categories
