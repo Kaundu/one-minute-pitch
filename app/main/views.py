@@ -1,3 +1,11 @@
+from flask import render_template,request,redirect,url_for,abort
+from flask_login import login_required,current_user
+from . import main
+from .forms import SignForm,UpdateProfile,CategoryForm,PitchForm,CommentForm
+from ..models import Category,User,Pitch,Comment
+from ..import db,photos
+
+
 # Views
 @main.route('/')
 def index():
@@ -21,7 +29,7 @@ def sign():
         password = form.password.data
         user = User(username = username , password = password)
         return redirect(url_for('.sign'))
-    return render_template('sign.html', sign_form=form )    return render_template('sign.html', sign_form=form )
+    return render_template('sign.html', sign_form=form )
 
 @main.route('/register', methods=["GET", "POST"])
 def register():
@@ -32,7 +40,7 @@ def register():
        db.session.commit()
        return redirect(url_for('auth.login'))
        title = 'New Account'
-   return render_template('auth/register.html', registration_form=form)   return render_template('auth/register.html', registration_form=form)
+   return render_template('auth/register.html', registration_form=form)
 
 @main.route('/user/<uname>')
 def profile(uname):
@@ -42,6 +50,10 @@ def profile(uname):
         abort(404)
 
     return render_template("profile/profile.html", user = user)
+# @main.route('/movie/review/new/<int:id>', methods = ['GET','POST'])
+# @login_required
+# def new_review(id):
+
 @main.route('/user/<uname>/update',methods = ['GET','POST'])
 @login_required
 def update_profile(uname):
@@ -58,6 +70,9 @@ def update_profile(uname):
         db.session.commit()
 
         return redirect(url_for('.profile',uname=user.username))
+
+    return render_template('profile/update.html',form =form)
+
 @main.route('/user/<uname>/update/pic',methods= ['POST'])
 @login_required
 def update_pic(uname):
@@ -68,6 +83,7 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('.profile',uname=uname))
+
 @main.route('/category/<int:id>')
 def category(id):
     category = Category.query.get(id)
@@ -78,6 +94,7 @@ def category(id):
     title = f'{category.category_name} page'
 
     return render_template('category.html',title=title, category=category,pitches=pitches)
+
 @main.route('/category/new', methods = ['GET','POST'])
 # @login_required
 def new_category():
@@ -95,6 +112,7 @@ def new_category():
 
     # title = 'new category'
     return render_template('new_category.html',category_form=form)
+
 
 @main.route('/pitch/new/<int:id>', methods = ['GET','POST'])
 # @login_required
@@ -114,6 +132,7 @@ def new_pitch(id):
     # title = 'new pitch'
     return render_template('new_pitch.html',pitch_form=form)
 
+
 @main.route('/pitch/<int:id>')
 def pitch(id):
     pitch = Pitch.query.get(id)
@@ -123,6 +142,7 @@ def pitch(id):
 
     title = f'Pitch { pitch.id }'
     return render_template('pitch.html',title=title, pitch=pitch, comment=comment)
+
 
 @main.route('/category/<int:id>', methods=['GET','POST'])
 @login_required
