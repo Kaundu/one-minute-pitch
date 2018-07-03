@@ -1,8 +1,12 @@
+from flask_wtf import FlaskForm
+from wtforms import StringField , TextAreaField,SubmitField
+from wtforms.validators import Required
+
 class SignForm(FlaskForm):
 
     username = StringField('username',validators=[Required()])
     password = StringField('password', validators=[Required()])
-    submit = SubmitField("submit")    submit = SubmitField("submit")
+    submit = SubmitField("submit")
 
 class UpdateProfile(FlaskForm):
     bio = TextAreaField('Tell us about you.',validators = [Required()])
