@@ -134,3 +134,18 @@ def delete_pitch(id):
    db.session.commit()
 #    flash('Your  Pitch has been deleted!', 'success')
    return redirect(url_for('.category', id=id))
+
+@main.route('/comment/new/<int:id>', methods=['GET', 'POST'])
+@login_required
+def new_comment(id):
+    pitch = Pitch.query.get(id)
+    comment = Comment.query.get(pitch.id)
+
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = form.comment.data
+        new_comment = Comment(comment=comment, user=current_user, pitch_id=id)
+        new_comment.save_comment()
+        return redirect(url_for('.pitch', id=id))
+    # title = f' Comment{comment.id}'
+    return render_template('new_comment.html', comment_form=form, pitch=pitch,comment=comment )
