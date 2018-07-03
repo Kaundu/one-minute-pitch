@@ -68,3 +68,13 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('.profile',uname=uname))
+@main.route('/category/<int:id>')
+def category(id):
+    category = Category.query.get(id)
+    pitches = Pitch.query.filter_by(category_id=id)
+    
+    
+
+    title = f'{category.category_name} page'
+
+    return render_template('category.html',title=title, category=category,pitches=pitches)
