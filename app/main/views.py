@@ -113,3 +113,13 @@ def new_pitch(id):
 
     # title = 'new pitch'
     return render_template('new_pitch.html',pitch_form=form)
+
+@main.route('/pitch/<int:id>')
+def pitch(id):
+    pitch = Pitch.query.get(id)
+    comment = Comment.get_comments(pitch_id=id)
+
+    # Comment.query.order_by(Comment.id.desc()).filter_by(pitch_id=id).all()
+
+    title = f'Pitch { pitch.id }'
+    return render_template('pitch.html',title=title, pitch=pitch, comment=comment)
