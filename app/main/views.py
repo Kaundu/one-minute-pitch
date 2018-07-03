@@ -95,3 +95,21 @@ def new_category():
 
     # title = 'new category'
     return render_template('new_category.html',category_form=form)
+
+@main.route('/pitch/new/<int:id>', methods = ['GET','POST'])
+# @login_required
+def new_pitch(id):
+    form = PitchForm()
+    
+    if form.validate_on_submit():
+        name = form.pitch.data
+
+        # Updated review instance
+        new_pitch = Pitch(name=name, category_id=id)
+
+        # save review method
+        new_pitch.save_pitch()
+        return redirect(url_for('main.category',id=id))
+
+    # title = 'new pitch'
+    return render_template('new_pitch.html',pitch_form=form)
