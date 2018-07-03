@@ -123,3 +123,14 @@ def pitch(id):
 
     title = f'Pitch { pitch.id }'
     return render_template('pitch.html',title=title, pitch=pitch, comment=comment)
+
+@main.route('/category/<int:id>', methods=['GET','POST'])
+@login_required
+def delete_pitch(id):
+   pitch = Pitch.query.get_or_404(id)
+#    if pitch.user_id != current_user:
+#        abort(403)
+   db.session.delete(pitch)
+   db.session.commit()
+#    flash('Your  Pitch has been deleted!', 'success')
+   return redirect(url_for('.category', id=id))
