@@ -1,3 +1,16 @@
+# File for models/classes
+from . import db
+from . import main
+from flask_login import UserMixin
+from . import login_manager
+from datetime import datetime
+from werkzeug.security import generate_password_hash,check_password_hash
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
 class User (UserMixin,db.Model):
     __tablename__ ='users'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,7 +26,6 @@ class User (UserMixin,db.Model):
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
 
     def __repr__(self):
-        return f'User {self.name}' class Category(db.Model):
         return f'User {self.name}' 
 
 
@@ -61,6 +73,7 @@ class Role(db.Model):
 
 
 class Category(db.Model):
+
     __tablename__ = 'categories'
 
     id = db.Column(db.Integer,primary_key = True)
@@ -75,6 +88,8 @@ class Category(db.Model):
     def get_categories(cls,id):
         categories = Category.query.all()
         return categories
+
+
 class Pitch(db.Model):
     __tablename__ = 'pitches'
 
@@ -93,7 +108,6 @@ class Pitch(db.Model):
     @classmethod
     def get_pitch(cls,category_id):
         pitches = Pitch.query.order_by(Pitch.id.desc()).filter_by(category_id=category_id).all()
-        return pitches        return pitches
         return pitches
 
 class Comment(db.Model):
