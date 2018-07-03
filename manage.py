@@ -10,11 +10,11 @@ from werkzeug.security import  generate_password_hash , check_password_hash
 
 # Creating app instance
 # app = create_app('test')
-app = create_app('development')
+app = create_app('production')
 # app = create_app('production')
 
 
-# Create manager instance 
+# Create manager instance
 manager = Manager(app)
 
 # Create migrate instance
@@ -26,7 +26,7 @@ manager.add_command('db',MigrateCommand)
 @manager.command
 def test():
     '''
-    
+
     Run the unit tests
     '''
     import unittest
