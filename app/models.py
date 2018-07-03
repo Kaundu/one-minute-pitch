@@ -47,4 +47,22 @@ class Pitch(db.Model):
     @classmethod
     def get_pitch(cls,category_id):
         pitches = Pitch.query.order_by(Pitch.id.desc()).filter_by(category_id=category_id).all()
+        return pitches        return pitches
         return pitches
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(255))
+    pitch_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    def save_comment(self):        
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls, pitch_id):       
+        comments = Comment.query.order_by(Comment.id.desc()).filter_by(pitch_id=pitch_id).all()
+
+        return comments
